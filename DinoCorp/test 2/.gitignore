@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Local secrets (API keys, passwords) — never commit ###
+application-local.yml
+application-local.yaml
+application-local.properties

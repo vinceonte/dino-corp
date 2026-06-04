@@ -1,146 +1,35 @@
 package com.DinoCorp.Lost_In_Woods.service;
 
-import com.DinoCorp.Lost_In_Woods.dto.GameResponse;
-import com.DinoCorp.Lost_In_Woods.exception.ResourceNotFoundException;
-import com.DinoCorp.Lost_In_Woods.model.*;
-import com.DinoCorp.Lost_In_Woods.repository.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import com.DinoCorp.Lost_In_Woods.dto.LeaderboardEntry;
+import com.DinoCorp.Lost_In_Woods.model.GameSession;
+import com.DinoCorp.Lost_In_Woods.repository.GameSessionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import java.util.*;
 
+import java.util.List;
+
+// Player/run bookkeeping for the AI-driven game: create a session and serve the
+// leaderboard. The story itself lives in the ai package (StoryService).
 @Service
+@RequiredArgsConstructor
 public class GameService {
 
     private final GameSessionRepository sessionRepository;
-    private final ScenarioRepository scenarioRepository;
-    private final RestTemplate restTemplate;
 
-    @Value("${anthropic.api.key:MOCK_KEY}")
-    private String apiKey;
 
-    public GameService(GameSessionRepository sessionRepo, ScenarioRepository scenarioRepo, RestTemplate rt) {
-        this.sessionRepository = sessionRepo;
-        this.scenarioRepository = scenarioRepo;
-        this.restTemplate = rt;
+
+    // Create and persist a fresh run; the ID is generated automatically on save.
+    public GameSession createSession(String playerName) {
+        return sessionRepository.save(GameSession.builder().playerName(playerName).build());
     }
 
-    public GameSession createSession() {
-        // Use builder so @Builder.Default values (hp=80, etc.) are respected
-        return sessionRepository.save(GameSession.builder().build());
-    }
-
-    public Scenario getScenarioForSession(Long sessionId) {
-        GameSession session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new ResourceNotFoundException("Session not found."));
-        return scenarioRepository.findById((long) session.getCurrentSceneIndex())
-                .orElseThrow(() -> new ResourceNotFoundException("Scenario not found."));
-    }
-
-    public GameSession executeChoice(Long sessionId, int choiceIndex) {
-        GameSession session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new ResourceNotFoundException("Session not found."));
-
-        if (session.isGameOver()) {
-            return session;
-        }
-
-        Scenario scenario = scenarioRepository.findById((long) session.getCurrentSceneIndex())
-                .orElseThrow(() -> new ResourceNotFoundException("Scenario not found."));
-
-        if (choiceIndex < 0 || choiceIndex >= scenario.getChoices().size()) {
-            throw new IllegalArgumentException("Invalid choice index.");
-        }
-
-        Choice chosen = scenario.getChoices().get(choiceIndex);
-        session.applyOutcome(chosen);
-
-        if (!session.isGameOver()) {
-            int nextIndex = session.getCurrentSceneIndex() + 1;
-            long totalCount = scenarioRepository.count();
-            if (nextIndex >= totalCount) {
-                session.setGameOver(true);
-            } else {
-                session.setCurrentSceneIndex(nextIndex);
-            }
-        }
-
-        return sessionRepository.save(session);
-    }
-
-    public String fetchDynamicSvg(String prompt) {
-        if ("MOCK_KEY".equals(apiKey)) {
-            return null;
-        }
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("x-api-key", apiKey);
-            headers.set("anthropic-version", "2023-06-01");
-
-            Map<String, Object> body = new HashMap<>();
-            body.put("model", "claude-3-5-sonnet-20241022");
-            body.put("max_tokens", 1200);
-
-            Map<String, String> msgMap = new HashMap<>();
-            msgMap.put("role", "user");
-            msgMap.put("content", "Generate valid RAW SVG code only matching this description: " + prompt + ". Do not wrap in markdown.");
-            body.put("messages", Collections.singletonList(msgMap));
-
-            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
-            ResponseEntity<Map> response = restTemplate.postForEntity("https://api.anthropic.com/v1/messages", entity, Map.class);
-
-            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                List<Map<String, Object>> content = (List<Map<String, Object>>) response.getBody().get("content");
-                return content.get(0).get("text").toString();
-            }
-        } catch (Exception ex) {
-            System.err.println("AI SVG fetch error: " + ex.getMessage());
-        }
-        return null;
-    }
-
-    public GameResponse mapToResponse(GameSession entity) {
-        GameResponse dto = new GameResponse();
-        dto.setSessionId(entity.getId());
-        dto.setHp(entity.getCurrentHealth());
-        dto.setScore(entity.getCurrentScore());
-        dto.setSceneIndex(entity.getCurrentSceneIndex());
-        dto.setGameOver(entity.isGameOver());
-        dto.setTraits(entity.getDiscoveredTraits());
-        dto.setHistory(entity.getNarrativeHistory());
-
-        Scenario scenario = scenarioRepository.findById((long) entity.getCurrentSceneIndex()).orElse(null);
-        if (scenario != null) {
-            dto.setSceneDescription(scenario.getSceneDescription());
-            dto.setHint(scenario.getHint());
-            dto.setEntityAvatar(scenario.getEntityAvatar());
-            dto.setEntityName(scenario.getEntityName());
-            dto.setEntityQuote(scenario.getEntityQuote());
-            dto.setSvgPrompt(scenario.getSvgPrompt());
-            dto.setChapter(scenario.getChapter());
-            dto.setChoices(scenario.getChoices().stream().map(Choice::getText).toList());
-        } else {
-            dto.setSceneDescription("The forest falls silent.");
-            dto.setHint("No more scenes are available.");
-            dto.setChoices(Collections.emptyList());
-        }
-
-        if (entity.isGameOver()) {
-            long total = scenarioRepository.count();
-            boolean ranOutOfScenes = entity.getCurrentSceneIndex() >= total;
-            if (entity.getCurrentHealth() <= 0) {
-                dto.setEndingTitle("💀 You Were Claimed");
-                dto.setEndingVerdict("The forest kept you. Your health dropped to zero and the trees closed in forever.");
-            } else if (ranOutOfScenes && entity.getCurrentHealth() >= 65) {
-                dto.setEndingTitle("🎉 Master Survivalist");
-                dto.setEndingVerdict("You read every threat, trusted your instincts, and walked out unbroken.");
-            } else {
-                dto.setEndingTitle("🌿 Scarred but Free");
-                dto.setEndingVerdict("You made mistakes. You paid for them. But you got out safely.");
-            }
-        }
-        return dto;
+    // Top 10 finished runs, ranked by final score.
+    public List<LeaderboardEntry> getLeaderboard() {
+        return sessionRepository.findTop10ByGameOverTrueOrderByFinalScoreDesc().stream()
+                .map(s -> new LeaderboardEntry(
+                        (s.getPlayerName() == null || s.getPlayerName().isBlank()) ? "Guest" : s.getPlayerName(),
+                        s.getEventsSurvived(),
+                        s.getFinalScore()))
+                .toList();
     }
 }

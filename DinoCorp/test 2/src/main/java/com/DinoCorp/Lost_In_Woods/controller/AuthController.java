@@ -1,12 +1,10 @@
 package com.DinoCorp.Lost_In_Woods.controller;
 
+import com.DinoCorp.Lost_In_Woods.dto.AuthResponse;
 import com.DinoCorp.Lost_In_Woods.dto.RegisterRequest;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.DinoCorp.Lost_In_Woods.model.GameSession;
+import com.DinoCorp.Lost_In_Woods.service.GameService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,29 +12,27 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class AuthController {
 
-    private final InMemoryUserDetailsManager userDetailsManager;
-    private final PasswordEncoder passwordEncoder;
+    private final GameService gameService;
 
-    // Direct injection targeting our exact custom user manager bean name
-    public AuthController(
-            @Qualifier("myCustomGameUserManager") InMemoryUserDetailsManager userDetailsManager,
-            PasswordEncoder passwordEncoder) {
-        this.userDetailsManager = userDetailsManager;
-        this.passwordEncoder = passwordEncoder;
+    public AuthController(GameService gameService) {
+        this.gameService = gameService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request) {
-        if (userDetailsManager.userExists(request.getUsername())) {
-            return ResponseEntity.badRequest().body("Username already exists!");
+    // Guest: create a session named "Guest". Returns the ID used to start the story.
+    @PostMapping("/guest")
+    public ResponseEntity<AuthResponse> playAsGuest() {
+        GameSession session = gameService.createSession("Guest");
+        return ResponseEntity.ok(new AuthResponse(session.getId(), session.getPlayerName()));
+    }
+
+    // Login: create a session under the chosen name.
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody RegisterRequest request) {
+        String name = request.getUsername();
+        if (name == null || name.isBlank()) {
+            return ResponseEntity.badRequest().build();
         }
-
-        UserDetails newUser = User.withUsername(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .roles("USER")
-                .build();
-
-        userDetailsManager.createUser(newUser);
-        return ResponseEntity.ok("Account created successfully!");
+        GameSession session = gameService.createSession(name.trim());
+        return ResponseEntity.ok(new AuthResponse(session.getId(), session.getPlayerName()));
     }
 }
