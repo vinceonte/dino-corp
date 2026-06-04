@@ -25,7 +25,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:var
 
 /* ─── SPLASH ─── */
 #splash{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 60%, #071a09 0%, #000 70%);overflow:hidden;}
-#home-mute{position:fixed;top:12px;left:12px;z-index:81;width:32px;height:32px;background:rgba(0,0,0,0.4);border:1px solid var(--green-dim);border-radius:4px;color:var(--green);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.2s;}
+#home-mute{position:fixed;top:52px;right:12px;z-index:81;width:32px;height:32px;background:rgba(0,0,0,0.4);border:1px solid var(--green-dim);border-radius:4px;color:var(--green);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.2s;}
 #home-mute:hover{border-color:var(--green);background:rgba(0,0,0,0.6);}
 #home-mute.muted{color:var(--muted);border-color:rgba(255,255,255,0.12);}
 #splash-trees{position:absolute;bottom:0;left:0;right:0;height:45%;pointer-events:none;}
@@ -91,6 +91,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:var
 .audio-menu-item span{display:inline-block;float:right;color:var(--green);font-size:11px;margin-top:2px;}
 .audio-menu-close{width:100%;margin-top:16px;padding:10px;background:none;border:1px solid var(--green-dim);border-radius:4px;color:var(--green);cursor:pointer;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;transition:all 0.2s;}
 .audio-menu-close:hover{border-color:var(--green);}
+#home-audio-btn{position:fixed;top:12px;right:12px;z-index:81;width:32px;height:32px;background:rgba(0,0,0,0.4);border:1px solid var(--green-dim);border-radius:4px;color:var(--green);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.2s;}
+#home-audio-btn:hover{border-color:var(--green);background:rgba(0,0,0,0.6);}
+.audio-menu-tabs{display:flex;gap:0;margin-bottom:18px;border-bottom:1px solid var(--green-dim);}
+.audio-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;padding:8px 4px;transition:all 0.2s;font-family:var(--font-b);}
+.audio-tab.active{color:var(--green);border-bottom-color:var(--green);}
+.audio-tab:hover{color:var(--text);}
+.audio-narr-apply{width:100%;margin-top:8px;padding:9px;background:rgba(74,222,128,0.08);border:1px solid var(--green-dim);border-radius:4px;color:var(--green);cursor:pointer;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;transition:all 0.2s;}
+.audio-narr-apply:hover{border-color:var(--green);background:rgba(74,222,128,0.14);}
 #hp-wrap{width:110px;}
 #hp-bg{height:5px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;margin-top:3px;}
 #hp-fill{height:100%;border-radius:3px;transition:width 0.5s,background 0.5s;width:100%;background:var(--green);}
@@ -222,6 +230,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:var
 <!-- ═══ SPLASH ═══ -->
 <div id="splash">
   <button id="home-mute" onclick="playClickSound(); toggleHomeTheme()" onmouseenter="playHoverBeep(event)" title="Mute forest ambience">🔊</button>
+  <button id="home-audio-btn" onclick="playClickSound(); openAudioMenu()" onmouseenter="playHoverBeep(event)" title="Audio settings">⚙️</button>
   <svg id="splash-trees" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
     <g opacity="0.25" fill="#0d2e0d">
       <polygon points="60,400 90,280 120,400"/><polygon points="200,400 240,220 280,400"/><polygon points="350,400 390,200 430,400"/>
@@ -311,15 +320,44 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:var
 <div id="audio-menu" class="audio-menu-overlay">
   <div class="audio-menu-popup">
     <div class="audio-menu-title">Audio Settings</div>
-    <div class="audio-menu-item">
-      <label>Music Volume</label>
-      <input type="range" id="vol-music" min="0" max="100" value="100" oninput="updateMusicVolume(this.value)">
-      <span id="vol-music-val">100%</span>
+    <div class="audio-menu-tabs">
+      <button class="audio-tab active" id="tab-btn-audio" onclick="playClickSound(); switchAudioTab('audio')" onmouseenter="playHoverBeep(event)">Audio</button>
+      <button class="audio-tab" id="tab-btn-narration" onclick="playClickSound(); switchAudioTab('narration')" onmouseenter="playHoverBeep(event)">Narration</button>
     </div>
-    <div class="audio-menu-item">
-      <label>Sound FX Volume</label>
-      <input type="range" id="vol-sfx" min="0" max="100" value="100" oninput="updateSfxVolume(this.value)">
-      <span id="vol-sfx-val">100%</span>
+    <div id="audio-tab-audio">
+      <div class="audio-menu-item">
+        <label>Master Volume</label>
+        <input type="range" id="vol-master" min="0" max="100" value="100" oninput="updateMasterVolume(this.value)">
+        <span id="vol-master-val">100%</span>
+      </div>
+      <div class="audio-menu-item">
+        <label>Music Volume</label>
+        <input type="range" id="vol-music" min="0" max="100" value="100" oninput="updateMusicVolume(this.value)">
+        <span id="vol-music-val">100%</span>
+      </div>
+      <div class="audio-menu-item">
+        <label>Sound FX Volume</label>
+        <input type="range" id="vol-sfx" min="0" max="100" value="100" oninput="updateSfxVolume(this.value)">
+        <span id="vol-sfx-val">100%</span>
+      </div>
+    </div>
+    <div id="audio-tab-narration" style="display:none">
+      <div class="audio-menu-item">
+        <label>Narration Volume</label>
+        <input type="range" id="vol-narr" min="0" max="100" value="100" oninput="updateNarrationVolume(this.value)">
+        <span id="vol-narr-val">100%</span>
+      </div>
+      <div class="audio-menu-item">
+        <label>Speech Rate</label>
+        <input type="range" id="narr-rate" min="0.5" max="2" step="0.05" value="0.95" oninput="document.getElementById('narr-rate-val').textContent=parseFloat(this.value).toFixed(2)">
+        <span id="narr-rate-val">0.95</span>
+      </div>
+      <div class="audio-menu-item">
+        <label>Speech Pitch</label>
+        <input type="range" id="narr-pitch" min="0.5" max="2" step="0.05" value="0.8" oninput="document.getElementById('narr-pitch-val').textContent=parseFloat(this.value).toFixed(2)">
+        <span id="narr-pitch-val">0.80</span>
+      </div>
+      <button class="audio-narr-apply" onclick="playClickSound(); applyNarrationSettings()" onmouseenter="playHoverBeep(event)">Apply Changes</button>
     </div>
     <button class="audio-menu-close" onclick="playClickSound(); closeAudioMenu()" onmouseenter="playHoverBeep(event)">Close</button>
   </div>
@@ -376,7 +414,8 @@ async function errMsg(res){ try{ const j=await res.json(); return j.message || (
 let audioOn=false, narrationOn=false, audioCtx=null, ambient=null, uiMaster=null, audioInitialized=false, homeAmbient=null, homeAudioOn=true;
 let currentScene='dense_forest', sceneTimer=null;
 let sceneTarget = {base:90, filter:1000, noise:0.06};
-let musicVolume = 1.0, sfxVolume = 1.0;
+let musicVolume = 1.0, sfxVolume = 1.0, masterVolume = 1.0;
+let narrationRate = 0.95, narrationPitch = 0.8, narrationVolume = 1.0;
 let lastHoverBeepTime = {};
 // Per-location soundscape: drone pitch/filter/wind PLUS the ambient one-shots
 // ("events") that make each place clearly distinct.
@@ -422,7 +461,7 @@ function startAmbient(){
   const noise = ctx.createBufferSource(); noise.buffer=buf; noise.loop=true; const nf=ctx.createBiquadFilter(); nf.type='lowpass'; nf.frequency.value=900; const noiseGain=ctx.createGain(); noiseGain.gain.value=sceneTarget.noise; noise.connect(nf); nf.connect(noiseGain); noiseGain.connect(master); noise.start();
   const heart=ctx.createOscillator(); heart.type='sine'; heart.frequency.value=44; const heartGain=ctx.createGain(); heartGain.gain.value=0; heart.connect(heartGain); heartGain.connect(master); heart.start();
   const hlfo=ctx.createOscillator(); hlfo.type='sine'; hlfo.frequency.value=1.1; const hDepth=ctx.createGain(); hDepth.gain.value=0; hlfo.connect(hDepth); hDepth.connect(heartGain.gain); hlfo.start();
-  master.gain.linearRampToValueAtTime(0.32 * musicVolume, ctx.currentTime+1.5);
+  master.gain.linearRampToValueAtTime(0.32 * musicVolume * masterVolume, ctx.currentTime+1.5);
   ambient = {master, filt, oscs, ratios, lfo, noise, noiseGain, hDepth};
   startScheduler();
 }
@@ -472,17 +511,69 @@ function playEvent(name){
     case 'crow':    if(Math.random()<0.08) { tone('sawtooth', 380, 280, 0.35, 0.08, 'lowpass', 800); setTimeout(()=>tone('sawtooth',420,310,0.32,0.07,'lowpass',850),200); } break;
   }
 }
-function updateMusicVolume(val){ musicVolume = parseFloat(val) / 100; if(ambient && ambient.master) { ambient.master.gain.value = 0.32 * musicVolume; } document.getElementById('vol-music-val').textContent = val + '%'; }
-function updateSfxVolume(val){ sfxVolume = parseFloat(val) / 100; document.getElementById('vol-sfx-val').textContent = val + '%'; }
-function openAudioMenu(){ document.getElementById('audio-menu').classList.add('show'); }
+function updateMasterVolume(val){
+  masterVolume = parseFloat(val) / 100;
+  if(ambient && ambient.master) ambient.master.gain.value = 0.32 * musicVolume * masterVolume;
+  if(homeAmbient && audioCtx) homeAmbient.master.gain.linearRampToValueAtTime(homeAudioOn ? 0.22 * musicVolume * masterVolume : 0, audioCtx.currentTime+0.1);
+  document.getElementById('vol-master-val').textContent = val + '%';
+  saveAudioSettings();
+}
+function updateMusicVolume(val){
+  musicVolume = parseFloat(val) / 100;
+  if(ambient && ambient.master) ambient.master.gain.value = 0.32 * musicVolume * masterVolume;
+  if(homeAmbient && audioCtx) homeAmbient.master.gain.linearRampToValueAtTime(homeAudioOn ? 0.22 * musicVolume * masterVolume : 0, audioCtx.currentTime+0.1);
+  document.getElementById('vol-music-val').textContent = val + '%';
+  saveAudioSettings();
+}
+function updateSfxVolume(val){ sfxVolume = parseFloat(val) / 100; document.getElementById('vol-sfx-val').textContent = val + '%'; saveAudioSettings(); }
+function updateNarrationVolume(val){ narrationVolume = parseFloat(val) / 100; document.getElementById('vol-narr-val').textContent = val + '%'; saveAudioSettings(); }
+function switchAudioTab(tab){
+  document.getElementById('audio-tab-audio').style.display = tab === 'audio' ? '' : 'none';
+  document.getElementById('audio-tab-narration').style.display = tab === 'narration' ? '' : 'none';
+  document.getElementById('tab-btn-audio').classList.toggle('active', tab === 'audio');
+  document.getElementById('tab-btn-narration').classList.toggle('active', tab === 'narration');
+}
+function openAudioMenu(){
+  const mv = Math.round(masterVolume * 100), muv = Math.round(musicVolume * 100), sv = Math.round(sfxVolume * 100);
+  document.getElementById('vol-master').value = mv; document.getElementById('vol-master-val').textContent = mv + '%';
+  document.getElementById('vol-music').value = muv; document.getElementById('vol-music-val').textContent = muv + '%';
+  document.getElementById('vol-sfx').value = sv; document.getElementById('vol-sfx-val').textContent = sv + '%';
+  const nv = Math.round(narrationVolume * 100);
+  document.getElementById('vol-narr').value = nv; document.getElementById('vol-narr-val').textContent = nv + '%';
+  document.getElementById('narr-rate').value = narrationRate; document.getElementById('narr-rate-val').textContent = narrationRate.toFixed(2);
+  document.getElementById('narr-pitch').value = narrationPitch; document.getElementById('narr-pitch-val').textContent = narrationPitch.toFixed(2);
+  document.getElementById('audio-menu').classList.add('show');
+}
 function closeAudioMenu(){ document.getElementById('audio-menu').classList.remove('show'); }
-function playHoverBeep(e){ initAudio(); const id = e.target.id || e.target.className; const now = Date.now(); if((lastHoverBeepTime[id] || 0) + 120 > now) return; lastHoverBeepTime[id] = now; if(sfxVolume<=0 || !audioCtx || !uiMaster) return; const ctx=audioCtx; const t=ctx.currentTime; const o=ctx.createOscillator(); o.type='sine'; o.frequency.value=620; const g=ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12*sfxVolume, t+0.008); g.gain.exponentialRampToValueAtTime(0.0001, t+0.06); const dest = ambient?.master || uiMaster; o.connect(g); g.connect(dest); o.start(t); o.stop(t+0.1); }
-function playClickSound(){ initAudio(); if(sfxVolume<=0 || !audioCtx || !uiMaster) return; const ctx=audioCtx; const t=ctx.currentTime; const o=ctx.createOscillator(); o.type='triangle'; o.frequency.setValueAtTime(880, t); o.frequency.exponentialRampToValueAtTime(440, t+0.12); const g=ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.16*sfxVolume, t+0.02); g.gain.exponentialRampToValueAtTime(0.0001, t+0.12); const dest = ambient?.master || uiMaster; o.connect(g); g.connect(dest); o.start(t); o.stop(t+0.15); }
+function applyNarrationSettings(){
+  narrationRate = parseFloat(document.getElementById('narr-rate').value);
+  narrationPitch = parseFloat(document.getElementById('narr-pitch').value);
+  saveAudioSettings();
+  if(narrationOn) narrate(G.lastNarrative);
+}
+function saveAudioSettings(){
+  try{ sessionStorage.setItem('liw_audio', JSON.stringify({master:masterVolume, music:musicVolume, sfx:sfxVolume, narVol:narrationVolume, narRate:narrationRate, narPitch:narrationPitch})); }catch(e){}
+}
+function loadAudioSettings(){
+  try{
+    const raw = sessionStorage.getItem('liw_audio'); if(!raw) return;
+    const s = JSON.parse(raw);
+    if(s.master  != null) masterVolume   = s.master;
+    if(s.music   != null) musicVolume    = s.music;
+    if(s.sfx     != null) sfxVolume      = s.sfx;
+    if(s.narVol  != null) narrationVolume = s.narVol;
+    if(s.narRate != null) narrationRate  = s.narRate;
+    if(s.narPitch!= null) narrationPitch = s.narPitch;
+  }catch(e){}
+}
+loadAudioSettings();
+function playHoverBeep(e){ initAudio(); const id = e.target.id || e.target.className; const now = Date.now(); if((lastHoverBeepTime[id] || 0) + 120 > now) return; lastHoverBeepTime[id] = now; if(sfxVolume*masterVolume<=0 || !audioCtx || !uiMaster) return; const ctx=audioCtx; const t=ctx.currentTime; const o=ctx.createOscillator(); o.type='sine'; o.frequency.value=620; const g=ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12*sfxVolume*masterVolume, t+0.008); g.gain.exponentialRampToValueAtTime(0.0001, t+0.06); o.connect(g); g.connect(uiMaster); o.start(t); o.stop(t+0.1); }
+function playClickSound(){ initAudio(); if(sfxVolume*masterVolume<=0 || !audioCtx || !uiMaster) return; const ctx=audioCtx; const t=ctx.currentTime; const o=ctx.createOscillator(); o.type='triangle'; o.frequency.setValueAtTime(880, t); o.frequency.exponentialRampToValueAtTime(440, t+0.12); const g=ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.16*sfxVolume*masterVolume, t+0.02); g.gain.exponentialRampToValueAtTime(0.0001, t+0.12); o.connect(g); g.connect(uiMaster); o.start(t); o.stop(t+0.15); }
 function startHomeTheme(){
   if(homeAmbient) return;
   initAudio();
   const ctx = ensureCtx(); 
-  const master = ctx.createGain(); master.gain.value = homeAudioOn ? 0.22 : 0;
+  const master = ctx.createGain(); master.gain.value = homeAudioOn ? 0.22 * musicVolume * masterVolume : 0;
   master.connect(ctx.destination);
   const filt = ctx.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=320; filt.connect(master);
   const oscs = [], ratios = [0.5, 1, 1.5];
@@ -511,12 +602,12 @@ function stopHomeTheme(){
 }
 function toggleHomeTheme(){
   homeAudioOn = !homeAudioOn;
-  if(homeAmbient) homeAmbient.master.gain.linearRampToValueAtTime(homeAudioOn?0.22:0, ensureCtx().currentTime+0.3);
+  if(homeAmbient) homeAmbient.master.gain.linearRampToValueAtTime(homeAudioOn ? 0.22 * musicVolume * masterVolume : 0, ensureCtx().currentTime+0.3);
   document.getElementById('home-mute').classList.toggle('muted', !homeAudioOn);
 }
 function toggleMusic(){ audioOn=!audioOn; if(audioOn){ ensureCtx(); startAmbient(); setAudioScene(G.location, G.hp); } else stopAmbient(); document.getElementById('btn-music').classList.toggle('off', !audioOn); }
 function toggleNarration(){ narrationOn=!narrationOn; document.getElementById('btn-narr').classList.toggle('off', !narrationOn); if(!narrationOn){ try{window.speechSynthesis.cancel();}catch(e){} } else { narrate(G.lastNarrative); } }
-function narrate(text){ if(!narrationOn || !text || !('speechSynthesis' in window)) return; try{ const s=window.speechSynthesis; s.cancel(); const u=new SpeechSynthesisUtterance(text); u.rate=0.95; u.pitch=0.8; s.speak(u); }catch(e){} }
+function narrate(text){ if(!narrationOn || !text || !('speechSynthesis' in window)) return; try{ const s=window.speechSynthesis; s.cancel(); const u=new SpeechSynthesisUtterance(text); u.rate=narrationRate; u.pitch=narrationPitch; u.volume=Math.min(1, masterVolume * narrationVolume); s.speak(u); }catch(e){} }
 
 // ─── SPLASH AUTH ───
 function startGame(){
@@ -751,6 +842,7 @@ async function beginStory(){
 async function choose(idx){
   playClickSound();
   if(G.busy) return;
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
   const c = G.choices[idx];
   if(!c) return;
   const text = c.text;
