@@ -2,9 +2,10 @@ package com.DinoCorp.Lost_In_Woods.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.ArrayList;
-import java.util.List;
 
+// A single endless playthrough. The AI generates the story and reports the
+// player's health, score, traits, and inventory each beat; this record holds the
+// latest values plus the final score, for the leaderboard.
 @Entity
 @Table(name = "game_sessions")
 @Getter
@@ -17,43 +18,27 @@ public class GameSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Name entered on the splash ("Guest" for guests).
+    private String playerName;
+
+    // Latest health/score reported by the AI for this run.
     @Builder.Default
-    private int currentHealth = 80;
+    private int currentHealth = 100;
     @Builder.Default
     private int currentScore = 0;
+
+    // How many events (beats) the player has survived this run.
     @Builder.Default
-    private int currentSceneIndex = 0;
+    private int eventsSurvived = 0;
+
+    // True once the run ends (death at 0 HP).
     @Builder.Default
-    private boolean isGameOver = false;
+    private boolean gameOver = false;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "session_traits", joinColumns = @JoinColumn(name = "session_id"))
-    @Column(name = "trait")
+    // The death title reached (null until the run ends).
+    private String ending;
+
+    // finalScore = currentScore + currentHealth + traitPoints, computed at death.
     @Builder.Default
-    private List<String> discoveredTraits = new ArrayList<>();
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "session_history", joinColumns = @JoinColumn(name = "session_id"))
-    @Column(name = "story_beat", columnDefinition = "TEXT")
-    @Builder.Default
-    private List<String> narrativeHistory = new ArrayList<>();
-
-    public void applyOutcome(Choice choice) {
-        this.currentHealth = Math.max(0, Math.min(100, this.currentHealth + choice.getHpModifier()));
-        this.currentScore += choice.getScoreModifier();
-
-        if (choice.getConferredTrait() != null && !choice.getConferredTrait().isBlank()) {
-            if (!this.discoveredTraits.contains(choice.getConferredTrait())) {
-                this.discoveredTraits.add(choice.getConferredTrait());
-            }
-        }
-
-        String cleanChapter = "Chapter " + (this.currentSceneIndex + 1);
-        String beatLog = String.format("%s|%b|%s", cleanChapter, choice.isGoodOutcome(), choice.getNarrative());
-        this.narrativeHistory.add(beatLog);
-
-        if (this.currentHealth <= 0) {
-            this.isGameOver = true;
-        }
-    }
+    private int finalScore = 0;
 }
