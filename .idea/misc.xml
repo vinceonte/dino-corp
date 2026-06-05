@@ -4,12 +4,9 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/App Project/Lost_In_Woods/pom.xml" />
-        <option value="$PROJECT_DIR$/Lost-In-Woods/DinoCorp/pom.xml" />
+        <option value="$PROJECT_DIR$/DinoCorp/test 2/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-26" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
-  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_24" default="true" project-jdk-name="24" project-jdk-type="JavaSDK" />
 </project>

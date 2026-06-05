@@ -270,7 +270,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:var
 #creator-main{display:flex;gap:16px;align-items:flex-start;justify-content:center;margin-bottom:10px;}
 #creator-char{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;}
 .creator-right-pad{width:210px;flex-shrink:0;}
-body.mobile-portrait #creator-main{flex-direction:column;align-items:center;gap:8px;}
+body.mobile-portrait #creator-main{flex-direction:column;align-items:center;gap:6px;}
+/* Compact gift panel on portrait phones — the panel itself stays visible but
+   trims internal padding/font so it doesn't crowd the portrait below it. */
+body.mobile-portrait #gift-panel{padding:6px 10px;}
+body.mobile-portrait #gift-panel .gift-title,
+body.mobile-portrait #gift-panel [class*="title"]{font-size:10px;letter-spacing:2px;}
+body.mobile-portrait #gift-panel .gift-item,
+body.mobile-portrait #gift-panel [class*="gift-row"],
+body.mobile-portrait #gift-panel li{font-size:11px;padding:5px 8px;}
+body.mobile-portrait #gift-panel .gift-flavor,
+body.mobile-portrait #gift-panel [class*="flavor"]{font-size:10px;}
 body.mobile-portrait .creator-right-pad{display:none;}
 body.mobile-portrait #gift-panel{width:320px;max-width:92vw;}
 body.mobile-landscape #creator-main{gap:10px;}
@@ -357,15 +367,34 @@ body.mobile-portrait .splash-headline{flex-direction:column;gap:4px;}
 body.mobile-portrait .splash-logo{height:clamp(80px,22vw,130px);}
 body.mobile-portrait .splash-title{font-size:clamp(34px,11vw,64px);letter-spacing:4px;}
 body.mobile-portrait .splash-subtitle{font-size:11px;letter-spacing:2px;margin-bottom:16px;}
-body.mobile-portrait #creator{padding:10px 14px;}
-body.mobile-portrait #creator-title{font-size:12px;letter-spacing:3px;margin-bottom:8px;}
-body.mobile-portrait #char-img{width:clamp(180px,60vw,260px);height:clamp(240px,78vw,360px);}
-body.mobile-portrait #char-name{font-size:13px;margin:6px 0 2px;}
-body.mobile-portrait .sel-row{width:88%;max-width:360px;padding:10px 12px;}
-body.mobile-portrait .sel-arrow{width:42px;height:42px;font-size:22px;}     /* finger-sized */
-body.mobile-portrait .sel-val{font-size:15px;}
-body.mobile-portrait #creator-actions{flex-direction:column;width:88%;max-width:380px;}
-body.mobile-portrait #creator-actions>*{width:100%;}
+/* The creator screen has more to show now (Starting Gift panel + portrait +
+   selector + 2 buttons). On a short phone the whole stack can exceed the
+   viewport — allow the creator container itself to scroll vertically as a
+   safety net so the Back button is always reachable. The in-game no-scroll
+   rule still applies; this is just the pre-game character screen. */
+body.mobile-portrait #creator{padding:8px 12px;overflow-y:auto;justify-content:flex-start;gap:6px;}
+body.mobile-portrait #creator-title{font-size:11px;letter-spacing:3px;margin-bottom:4px;}
+/* Portrait shrunk so the gift panel + portrait + actions fit on a typical phone. */
+body.mobile-portrait #char-img{width:clamp(140px,38vw,200px);height:clamp(180px,52vw,260px);}
+body.mobile-portrait #char-preview.pix-frame{padding:6px 10px;}
+body.mobile-portrait #char-name{font-size:12px;margin:4px 0 2px;}
+/* Selector row + arrows — fixed alignment issue where 42px arrows + 88% row
+   overflowed the right edge on narrow phones (the right arrow visibly broke
+   out of the frame). box-sizing:border-box keeps the row's actual outer
+   width = the declared 92%, slightly smaller arrows (38px) leave breathing
+   room inside, and min-width:0 on .sel-mid lets the middle label shrink
+   instead of forcing the right arrow outward. */
+body.mobile-portrait .sel-row{width:92%;max-width:360px;padding:8px 10px;box-sizing:border-box;gap:10px;}
+body.mobile-portrait .sel-arrow{width:38px;height:38px;font-size:20px;flex:0 0 38px;}
+body.mobile-portrait .sel-mid{min-width:0;flex:1 1 auto;}
+body.mobile-portrait .sel-val{font-size:14px;}
+/* Put Enter the Woods + Back on ONE row so both are visible on a tall phone
+   (they were stacked vertically before, which pushed Back below the viewport). */
+body.mobile-portrait #creator-actions{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:8px;width:92%;max-width:420px;margin-top:8px;}
+body.mobile-portrait #creator-actions .splash-play{padding:11px 14px;font-size:12px;letter-spacing:2px;min-height:42px;flex:1 1 auto;}
+body.mobile-portrait #creator-actions .splash-back,
+body.mobile-portrait #creator-actions button[onclick*="hideCreator"],
+body.mobile-portrait #creator-actions button[onclick*="goToMenu"]{flex:0 0 auto;padding:11px 16px;}
 /* In-game: topbar + triptych + narrative + 2x2 choices, full height */
 body.mobile-portrait #story-lower{flex-direction:column;gap:8px;min-height:0;}
 body.mobile-portrait #story-lower>#story-box{flex:1 1 auto;min-height:0;max-height:none;overflow:hidden;display:flex;flex-direction:column;}

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4a129c33-986a-49d8-82ae-8aac58efe698" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dino-corp.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DinoCorp/test 2/src/main/resources/static/lost_in_woods.html" beforeDir="false" afterPath="$PROJECT_DIR$/DinoCorp/test 2/src/main/resources/static/lost_in_woods.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/Chris Nelson/dino-corp" value="3EZypfQAGNGQEh0o6gk3wvupULf" />
+      <entry key="_C:/Users/Chris Nelson/dino-corp/DinoCorp/test 2" value="3Ea5mRdC1VdPeJBU03bdkvjYUQh" />
+    </persistenceIdMap>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="added-all-epics1-12-Cantela" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Allister15&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/vinceonte/dino-corp.git&quot;,
+    &quot;accountId&quot;: &quot;ee783be7-7609-451a-809c-344b888c6dca&quot;
+  }
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3EZypfQAGNGQEh0o6gk3wvupULf" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.lost_in_woods.html.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.LostInWoodsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;final&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Chris Nelson/dino-corp/DinoCorp/test 2/Assets/Antagonist/Mid_Demon_Form&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Chris Nelson\dino-corp\DinoCorp\test 2\Assets\Antagonist\Mid_Demon_Form" />
+      <recent name="C:\Users\Chris Nelson\dino-corp\DinoCorp\test 2\Assets\Environment" />
+      <recent name="C:\Users\Chris Nelson\dino-corp\DinoCorp\test 2\Assets\Secodary_NPC" />
+      <recent name="C:\Users\Chris Nelson\dino-corp\DinoCorp\test 2\Assets\choose_your_survivor_or_protagonist\Emotion &amp; Stance\Voss" />
+      <recent name="C:\Users\Chris Nelson\dino-corp\DinoCorp\test 2\Assets\choose_your_survivor_or_protagonist\Emotion &amp; Stance\Runa" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Chris Nelson\dino-corp\DinoCorp\test 2\Assets" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.lost_in_woods.html">
+    <configuration name="lost_in_woods.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/dino-corp/Lost_In_Woods/static/lost_in_woods.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="LostInWoodsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="Lost_In_Woods" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.DinoCorp.Lost_In_Woods.LostInWoodsApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.lost_in_woods.html" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4a129c33-986a-49d8-82ae-8aac58efe698" name="Changes" comment="" />
+      <created>1780400572196</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1780400572196</updated>
+      <workItem from="1780400573362" duration="533000" />
+      <workItem from="1780401114411" duration="97000" />
+      <workItem from="1780401267137" duration="2611000" />
+      <workItem from="1780403987441" duration="5231000" />
+      <workItem from="1780417782245" duration="7896000" />
+      <workItem from="1780426128885" duration="1094000" />
+      <workItem from="1780450359845" duration="6825000" />
+      <workItem from="1780472180568" duration="3527000" />
+      <workItem from="1780483675877" duration="1310000" />
+      <workItem from="1780488670874" duration="822000" />
+      <workItem from="1780500641478" duration="1242000" />
+      <workItem from="1780504329246" duration="3602000" />
+      <workItem from="1780539088860" duration="8512000" />
+      <workItem from="1780553829459" duration="513000" />
+      <workItem from="1780555932815" duration="3163000" />
+      <workItem from="1780562535910" duration="10000" />
+      <workItem from="1780563101345" duration="557000" />
+      <workItem from="1780563690898" duration="26847000" />
+      <workItem from="1780624388824" duration="465000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>
